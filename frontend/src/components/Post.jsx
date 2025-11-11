@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
+import { API_BASE_URL } from "../config/api";
 import "./Post.css";
 
 const Post = ({ post, onUpdate, onDelete }) => {
@@ -53,7 +54,7 @@ const Post = ({ post, onUpdate, onDelete }) => {
     setIsReposting(true);
     try {
       await axios.post(`/api/posts/${post._id}/repost`, {
-        content: repostContent.trim()
+        content: repostContent.trim(),
       });
       setShowRepostModal(false);
       setRepostContent("");
@@ -114,11 +115,15 @@ const Post = ({ post, onUpdate, onDelete }) => {
           <span className="repost-text">{post.author.name} reposted</span>
         </div>
       )}
-      
+
       <div className="post-header">
         <div className="post-author">
           <img
-            src={post.author.profilePicture ? `/uploads/${post.author.profilePicture}` : "/default-avatar.png"}
+            src={
+              post.author.profilePicture
+                ? `${API_BASE_URL}/uploads/${post.author.profilePicture}`
+                : "/default-avatar.png"
+            }
             alt={post.author.name}
             className="author-avatar"
           />
@@ -182,19 +187,28 @@ const Post = ({ post, onUpdate, onDelete }) => {
           <div className="original-post-card">
             <div className="original-post-header">
               <img
-                src={post.originalPost.author?.profilePicture ? `/uploads/${post.originalPost.author.profilePicture}` : "/default-avatar.png"}
+                src={
+                  post.originalPost.author?.profilePicture
+                    ? `${API_BASE_URL}/uploads/${post.originalPost.author.profilePicture}`
+                    : "/default-avatar.png"
+                }
                 alt={post.originalPost.author?.name}
                 className="original-author-avatar"
               />
               <div className="original-author-info">
                 <h5>{post.originalPost.author?.name}</h5>
-                <span className="original-post-time">{formatDate(post.originalPost.createdAt)}</span>
+                <span className="original-post-time">
+                  {formatDate(post.originalPost.createdAt)}
+                </span>
               </div>
             </div>
             <p className="original-post-content">{post.originalPost.content}</p>
             {post.originalPost.image && (
               <div className="original-post-image">
-                <img src={`/uploads/${post.originalPost.image}`} alt="Original post" />
+                <img
+                  src={`${API_BASE_URL}/uploads/${post.originalPost.image}`}
+                  alt="Original post"
+                />
               </div>
             )}
           </div>
@@ -202,10 +216,7 @@ const Post = ({ post, onUpdate, onDelete }) => {
 
         {post.image && !post.isRepost && (
           <div className="post-image">
-            <img
-              src={`/uploads/${post.image}`}
-              alt="Post"
-            />
+            <img src={`${API_BASE_URL}/uploads/${post.image}`} alt="Post" />
           </div>
         )}
       </div>
@@ -229,10 +240,7 @@ const Post = ({ post, onUpdate, onDelete }) => {
         >
           💬 Comment
         </button>
-        <button
-          onClick={() => setShowRepostModal(true)}
-          className="action-btn"
-        >
+        <button onClick={() => setShowRepostModal(true)} className="action-btn">
           🔄 Repost
         </button>
         <button className="action-btn">➤ Send</button>
@@ -242,7 +250,11 @@ const Post = ({ post, onUpdate, onDelete }) => {
         <div className="comments-section">
           <form onSubmit={handleAddComment} className="comment-form">
             <img
-              src={user?.profilePicture ? `/uploads/${user.profilePicture}` : "/default-avatar.png"}
+              src={
+                user?.profilePicture
+                  ? `${API_BASE_URL}/uploads/${user.profilePicture}`
+                  : "/default-avatar.png"
+              }
               alt="Your avatar"
               className="comment-avatar"
             />
@@ -264,7 +276,11 @@ const Post = ({ post, onUpdate, onDelete }) => {
             {post.comments.map((comment, index) => (
               <div key={index} className="comment">
                 <img
-                  src={comment.user.profilePicture ? `/uploads/${comment.user.profilePicture}` : "/default-avatar.png"}
+                  src={
+                    comment.user.profilePicture
+                      ? `${API_BASE_URL}/uploads/${comment.user.profilePicture}`
+                      : "/default-avatar.png"
+                  }
                   alt={comment.user.name}
                   className="comment-avatar"
                 />
@@ -285,11 +301,19 @@ const Post = ({ post, onUpdate, onDelete }) => {
 
       {/* Repost Modal */}
       {showRepostModal && (
-        <div className="modal-overlay" onClick={() => setShowRepostModal(false)}>
+        <div
+          className="modal-overlay"
+          onClick={() => setShowRepostModal(false)}
+        >
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h3>Repost</h3>
-              <button onClick={() => setShowRepostModal(false)} className="modal-close">×</button>
+              <button
+                onClick={() => setShowRepostModal(false)}
+                className="modal-close"
+              >
+                ×
+              </button>
             </div>
             <form onSubmit={handleRepost}>
               <textarea
@@ -302,7 +326,11 @@ const Post = ({ post, onUpdate, onDelete }) => {
               <div className="original-post-preview">
                 <div className="preview-header">
                   <img
-                    src={post.author?.profilePicture ? `/uploads/${post.author.profilePicture}` : "/default-avatar.png"}
+                    src={
+                      post.author?.profilePicture
+                        ? `${API_BASE_URL}/uploads/${post.author.profilePicture}`
+                        : "/default-avatar.png"
+                    }
                     alt={post.author?.name}
                     className="preview-avatar"
                   />
@@ -311,10 +339,18 @@ const Post = ({ post, onUpdate, onDelete }) => {
                 <p>{post.content}</p>
               </div>
               <div className="modal-actions">
-                <button type="button" onClick={() => setShowRepostModal(false)} className="btn btn-outline">
+                <button
+                  type="button"
+                  onClick={() => setShowRepostModal(false)}
+                  className="btn btn-outline"
+                >
                   Cancel
                 </button>
-                <button type="submit" disabled={isReposting} className="btn btn-primary">
+                <button
+                  type="submit"
+                  disabled={isReposting}
+                  className="btn btn-primary"
+                >
                   {isReposting ? "Reposting..." : "Repost"}
                 </button>
               </div>
