@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../config/api";
 import axios from "axios";
 import "./Navbar.css";
 
@@ -72,7 +73,7 @@ const Navbar = () => {
                     <img
                       src={
                         user.profilePicture
-                          ? `/uploads/${user.profilePicture}`
+                          ? `${API_BASE_URL}/uploads/${user.profilePicture}`
                           : "/default-avatar.png"
                       }
                       alt={user.name}
@@ -95,7 +96,7 @@ const Navbar = () => {
               <img
                 src={
                   user?.profilePicture
-                    ? `/uploads/${user.profilePicture}`
+                    ? `${API_BASE_URL}/uploads/${user.profilePicture}`
                     : "/default-avatar.png"
                 }
                 alt="Profile"
