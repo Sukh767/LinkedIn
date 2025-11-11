@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import "./CreatePost.css";
+import { API_BASE_URL } from "../config/api";
 
 const CreatePost = ({ onPostCreated }) => {
   const [content, setContent] = useState("");
@@ -95,7 +96,7 @@ const CreatePost = ({ onPostCreated }) => {
         <img
           src={
             user?.profilePicture
-              ? `/uploads/${user.profilePicture}`
+              ? `${API_BASE_URL}/uploads/${user.profilePicture}`
               : "/default-avatar.png"
           }
           alt={user?.name}
